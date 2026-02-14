@@ -73,7 +73,7 @@ class TestInstanceEvent(unittest.TestCase):
 
         self.assertNotIn(test_dummy, callables)
 
-    def test_add_listener(self):
+    def test_call_registration(self):
 
         @self.test_object.OnTestEvent1
         def test_dummy(param1: bool):

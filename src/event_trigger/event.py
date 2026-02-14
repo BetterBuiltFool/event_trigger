@@ -21,6 +21,10 @@ SENTINEL = _Sentinel()
 
 
 class Event[T](ABC):
+    """
+    Base class for per-instance events.
+    Subclasses must define the `trigger` method, which defines the event signature.
+    """
 
     def __init__(self, instance: T) -> None:
         self._instance = ref(instance)

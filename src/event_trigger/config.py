@@ -28,7 +28,9 @@ def config(
         case SchedulingMode.ASYNCIO:
             scheduler_ = scheduler.AsyncioScheduler()
         case SchedulingMode.CUSTOM:
-            assert custom_scheduler is not None
+            assert (
+                custom_scheduler is not None
+            ), "Custom mode requires a scheduler be supplied."
             scheduler_ = custom_scheduler
         case _:
             raise ValueError(f"Invalid scheduling mode {scheduling_mode}")

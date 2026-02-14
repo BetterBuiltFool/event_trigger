@@ -6,7 +6,7 @@ from functools import singledispatchmethod
 from typing import Any, TYPE_CHECKING
 from weakref import ref, WeakKeyDictionary
 
-import scheduler
+from event_trigger import scheduler
 
 
 if TYPE_CHECKING:

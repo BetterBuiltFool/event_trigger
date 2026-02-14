@@ -20,6 +20,15 @@ def config(
     scheduling_mode: SchedulingMode = SchedulingMode.DEFAULT,
     custom_scheduler: scheduler.Scheduler | None = None,
 ) -> None:
+    """
+    Allows for changing of global behavior of the module.
+
+    :param scheduling_mode: Determines the behavior of the scheduler. Custom requires
+        passing a scheduler instance.
+    :type scheduling_mode: SchedulingMode
+    :param custom_scheduler: A Scheduler instance, only used in Custom mode.
+    :type custom_scheduler: scheduler.Scheduler | None
+    """
     scheduler_: scheduler.Scheduler
     match scheduling_mode:
         case SchedulingMode.DEFAULT:

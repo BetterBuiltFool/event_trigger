@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from functools import singledispatchmethod
 from typing import Any, TYPE_CHECKING
 from weakref import ref, WeakKeyDictionary
 
@@ -33,6 +34,24 @@ class Event[T](ABC):
         If the instance has expired, returns `None`.
         """
         return self._instance()
+
+    @singledispatchmethod
+    def __call__(self, argy) -> Any:
+        raise NotImplementedError("Argument type not supported")
+
+    @__call__.register
+    def _(self, listener: Callable) -> Callable:
+        self._register(SENTINEL, listener)
+        return listener
+
+    @__call__.register
+    def _(self, caller: object) -> Callable:
+
+        def inner(listener: Callable):
+            self._register(caller, listener)
+            return listener
+
+        return inner
 
     @abstractmethod
     def trigger(self, *args, **kwds) -> None:

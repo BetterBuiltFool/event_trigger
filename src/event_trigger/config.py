@@ -17,7 +17,7 @@ class SchedulingMode(Enum):
 
 
 def config(
-    scheduling_mode: SchedulingMode, custom_scheduler: scheduler.Scheduler
+    scheduling_mode: SchedulingMode, custom_scheduler: scheduler.Scheduler | None = None
 ) -> None:
     scheduler_: scheduler.Scheduler
     match scheduling_mode:
@@ -28,6 +28,7 @@ def config(
         case SchedulingMode.ASYNCIO:
             scheduler_ = scheduler.AsyncioScheduler()
         case SchedulingMode.CUSTOM:
+            assert custom_scheduler is not None
             scheduler_ = custom_scheduler
         case _:
             raise ValueError(f"Invalid scheduling mode {scheduling_mode}")

@@ -8,18 +8,18 @@ if TYPE_CHECKING:
 
 class Scheduler(Protocol):
     """
-    Object used for following through on callback registered to events.
+    Object used for following through on func registered to events.
     """
 
-    def schedule(self, callback: Callable, *args, **kwds) -> None:
+    def schedule(self, func: Callable, *args, **kwds) -> None:
         """
-        Schedules a callback to be called.
+        Schedules a func to be called.
 
-        :param callback: Method or function to be scheduled.
-        :type callback: Callable
-        :param args: Pass-through positional arguments for _callback_.
+        :param func: Method or function to be scheduled.
+        :type func: Callable
+        :param args: Pass-through positional arguments for _func_.
         :type args: Any
-        :param kwds: Pass-through keyword arguments for _callback_.
+        :param kwds: Pass-through keyword arguments for _func_.
         :type kwds: Any
         """
         ...

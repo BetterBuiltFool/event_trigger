@@ -6,10 +6,6 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-def schedule(callback: Callable, *args, **kwds) -> None:
-    pass
-
-
 class Scheduler(Protocol):
     """
     Object used for following through on callback registered to events.
@@ -27,3 +23,16 @@ class Scheduler(Protocol):
         :type kwds: Any
         """
         ...
+
+
+class SyncScheduler:
+
+    def schedule(self, callback: Callable, *args, **kwds) -> None:
+        callback(*args, **kwds)
+
+
+_active_scheduler: Scheduler = SyncScheduler()
+
+
+def schedule(callback: Callable, *args, **kwds) -> None:
+    _active_scheduler.schedule(callback, *args, **kwds)

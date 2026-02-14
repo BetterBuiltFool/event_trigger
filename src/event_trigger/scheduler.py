@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import Protocol, TYPE_CHECKING
+import asyncio
+import threading
+from typing import Any, Protocol, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -32,6 +34,25 @@ class SyncScheduler(Scheduler):
 
     def schedule(self, callback: Callable, *args, **kwds) -> None:
         callback(*args, **kwds)
+
+
+class ThreadScheduler(Scheduler):
+    """
+    Simple asynchronous scheduler using the python threading library.
+    """
+
+    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
+        threading.Thread(target=callback, args=args, kwargs=kwds).start()
+
+
+class AsyncioScheduler(Scheduler):
+    """
+    Scheduler that relies on asyncio, useful for web deployment where python.threading
+    doesn't work properly.
+    """
+
+    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
+        asyncio.create_task(callback(*args, **kwds))
 
 
 _active_scheduler: Scheduler = SyncScheduler()

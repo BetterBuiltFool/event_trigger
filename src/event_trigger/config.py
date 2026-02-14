@@ -17,19 +17,19 @@ class SchedulingMode(Enum):
 
 
 def config(
-    scheduling_mode: SchedulingMode = SchedulingMode.DEFAULT,
+    scheduling_mode: SchedulingMode | None = None,
     custom_scheduler: scheduler.Scheduler | None = None,
 ) -> None:
     """
     Allows for changing of global behavior of the module.
 
     :param scheduling_mode: Determines the behavior of the scheduler. Custom requires
-        passing a scheduler instance.
-    :type scheduling_mode: SchedulingMode
+        passing a scheduler instance. If None, the schedular will not change.
+    :type scheduling_mode: SchedulingMode | None
     :param custom_scheduler: A Scheduler instance, only used in Custom mode.
     :type custom_scheduler: scheduler.Scheduler | None
     """
-    scheduler_: scheduler.Scheduler
+    scheduler_: scheduler.Scheduler | None
     match scheduling_mode:
         case SchedulingMode.DEFAULT:
             scheduler_ = scheduler.SyncScheduler()
@@ -42,6 +42,7 @@ def config(
                 custom_scheduler is not None
             ), "Custom mode requires a scheduler be supplied."
             scheduler_ = custom_scheduler
-        case _:
-            raise ValueError(f"Invalid scheduling mode {scheduling_mode}")
-    scheduler._active_scheduler = scheduler_
+        case None:
+            scheduler_ = None
+    if scheduler_ is not None:
+        scheduler._active_scheduler = scheduler_

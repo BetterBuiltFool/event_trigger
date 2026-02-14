@@ -6,6 +6,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
+def schedule(callback: Callable, *args, **kwds) -> None:
+    pass
+
+
 class Scheduler(Protocol):
     """
     Object used for following through on callback registered to events.

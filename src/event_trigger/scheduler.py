@@ -46,6 +46,10 @@ class ThreadScheduler(Scheduler):
 
 
 class AsyncioScheduler(Scheduler):
+    """
+    Scheduler that relies on asyncio, useful for web deployment where python.threading
+    doesn't work properly.
+    """
 
     def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
         asyncio.create_task(callback(*args, **kwds))

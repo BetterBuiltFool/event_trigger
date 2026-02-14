@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Protocol, TYPE_CHECKING
+import threading
+from typing import Any, Protocol, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -32,6 +33,15 @@ class SyncScheduler(Scheduler):
 
     def schedule(self, callback: Callable, *args, **kwds) -> None:
         callback(*args, **kwds)
+
+
+class ThreadScheduler(Scheduler):
+    """
+    Simple asynchronous scheduler using the python threading library.
+    """
+
+    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
+        threading.Thread(target=callable, args=args, kwargs=kwds).start()
 
 
 _active_scheduler: Scheduler = SyncScheduler()

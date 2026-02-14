@@ -15,6 +15,9 @@ class CustomScheduler(Scheduler):
 
 class TestConfig(unittest.TestCase):
 
+    def tearDown(self) -> None:
+        config(SchedulingMode.DEFAULT)
+
     def test_config(self) -> None:
 
         # Threaded mode

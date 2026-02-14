@@ -9,7 +9,7 @@ from event_trigger.scheduler import Scheduler
 
 class CustomScheduler(Scheduler):
 
-    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
+    def schedule(self, func: Callable[..., Any], *args, **kwds) -> None:
         pass
 
 

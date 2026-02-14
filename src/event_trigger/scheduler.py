@@ -2,29 +2,12 @@ from __future__ import annotations
 
 import asyncio
 import threading
-from typing import Any, Protocol, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
+
+from .typing.scheduler import Scheduler
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-
-
-class Scheduler(Protocol):
-    """
-    Object used for following through on callback registered to events.
-    """
-
-    def schedule(self, callback: Callable, *args, **kwds) -> None:
-        """
-        Schedules a callback to be called.
-
-        :param callback: Method or function to be scheduled.
-        :type callback: Callable
-        :param args: Pass-through positional arguments for _callback_.
-        :type args: Any
-        :param kwds: Pass-through keyword arguments for _callback_.
-        :type kwds: Any
-        """
-        ...
 
 
 class SyncScheduler(Scheduler):
@@ -32,8 +15,8 @@ class SyncScheduler(Scheduler):
     Default, synchronous scheduler that simple calls the callable.
     """
 
-    def schedule(self, callback: Callable, *args, **kwds) -> None:
-        callback(*args, **kwds)
+    def schedule(self, func: Callable, *args, **kwds) -> None:
+        func(*args, **kwds)
 
 
 class ThreadScheduler(Scheduler):
@@ -41,8 +24,8 @@ class ThreadScheduler(Scheduler):
     Simple asynchronous scheduler using the python threading library.
     """
 
-    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
-        threading.Thread(target=callback, args=args, kwargs=kwds).start()
+    def schedule(self, func: Callable[..., Any], *args, **kwds) -> None:
+        threading.Thread(target=func, args=args, kwargs=kwds).start()
 
 
 class AsyncioScheduler(Scheduler):
@@ -51,12 +34,12 @@ class AsyncioScheduler(Scheduler):
     doesn't work properly.
     """
 
-    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
-        asyncio.create_task(callback(*args, **kwds))
+    def schedule(self, func: Callable[..., Any], *args, **kwds) -> None:
+        asyncio.create_task(func(*args, **kwds))
 
 
 _active_scheduler: Scheduler = SyncScheduler()
 
 
-def schedule(callback: Callable, *args, **kwds) -> None:
-    _active_scheduler.schedule(callback, *args, **kwds)
+def schedule(func: Callable, *args, **kwds) -> None:
+    _active_scheduler.schedule(func, *args, **kwds)

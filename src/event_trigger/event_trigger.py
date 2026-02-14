@@ -5,6 +5,8 @@ from collections.abc import Callable
 from typing import Any, TYPE_CHECKING
 from weakref import ref, WeakKeyDictionary
 
+import scheduler
+
 
 if TYPE_CHECKING:
     pass
@@ -58,4 +60,12 @@ class Event[T](ABC):
         defined call method that defines its parameters, which are passed on to the
         listeners.
         """
-        pass
+        for caller, listeners in self.listeners.items():
+            # The pyrite threading module can be set to run regular threads or asyncio
+            # threads.
+            if caller is not SENTINEL:
+                for listener in listeners:
+                    scheduler.schedule(listener, *(caller, *args))
+                continue
+            for listener in listeners:
+                scheduler.schedule(listener, *args)

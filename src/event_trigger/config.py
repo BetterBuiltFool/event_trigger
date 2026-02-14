@@ -17,7 +17,8 @@ class SchedulingMode(Enum):
 
 
 def config(
-    scheduling_mode: SchedulingMode, custom_scheduler: scheduler.Scheduler | None = None
+    scheduling_mode: SchedulingMode = SchedulingMode.DEFAULT,
+    custom_scheduler: scheduler.Scheduler | None = None,
 ) -> None:
     scheduler_: scheduler.Scheduler
     match scheduling_mode:

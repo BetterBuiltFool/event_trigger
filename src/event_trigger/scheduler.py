@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import threading
 from typing import Any, Protocol, TYPE_CHECKING
 
@@ -41,7 +42,13 @@ class ThreadScheduler(Scheduler):
     """
 
     def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
-        threading.Thread(target=callable, args=args, kwargs=kwds).start()
+        threading.Thread(target=callback, args=args, kwargs=kwds).start()
+
+
+class AsyncioScheduler(Scheduler):
+
+    def schedule(self, callback: Callable[..., Any], *args, **kwds) -> None:
+        asyncio.create_task(callback(*args, **kwds))
 
 
 _active_scheduler: Scheduler = SyncScheduler()

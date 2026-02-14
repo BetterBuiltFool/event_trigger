@@ -36,7 +36,7 @@ class Event[T](ABC):
         return self._instance()
 
     @singledispatchmethod
-    def __call__(self, argy) -> Any:
+    def __call__(self, _) -> Any:
         raise NotImplementedError("Argument type not supported")
 
     @__call__.register

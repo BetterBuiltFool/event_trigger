@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-class Notifier(Protocol):
+class Scheduler(Protocol):
     """
     Object used for following through on callback registered to events.
     """

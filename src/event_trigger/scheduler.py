@@ -25,7 +25,10 @@ class Scheduler(Protocol):
         ...
 
 
-class SyncScheduler:
+class SyncScheduler(Scheduler):
+    """
+    Default, synchronous scheduler that simple calls the callable.
+    """
 
     def schedule(self, callback: Callable, *args, **kwds) -> None:
         callback(*args, **kwds)

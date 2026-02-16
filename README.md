@@ -132,8 +132,6 @@ Event trigger supplies no events by default, they must be custom made.
 
 As an example, we'll make a simple event for detecting when an object is enabled.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Defining Events
 
 
@@ -210,7 +208,7 @@ Important notes:
 - The callback should be defined in the init method.
 - The callback does not need a name, "_" is fine.
 - The `self` inside the callback must shadow the `self` of the init. This allows the callback to use the object, but won't prevent garbage collection due to a closure.
-- Other than the `self`, the signature is _exactly the same_ as the trigger method of `OnEnable`
+- Other than the `self`, the signature is _exactly the same_ as the trigger method of `OnEnable`.
 - The owner of the callback doesn't have to be the subscribing object, just something that will live around the same lifetime.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -235,6 +233,38 @@ class Foo:
             self.OnEnable.trigger(self)
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+### Synchronous and Asynchronous
+
+By default, Event trigger will attempt to run callbacks in synchronous mode. This means that any blocking that occurs in the callback will also block the main program. To get around this, you may use the `config` function to change the scheduler.
+
+```python
+import event_trigger
+
+event_trigger.config(event_trigger.SchedulingMode.THREADED)
+
+```
+
+There are three schedulers available:
+- SyncScheduler: Corresponds to `SchedulingMode.DEFAULT`. Runs callbacks synchronously.
+- ThreadScheduler: Corresponds to `SchedulingMode.THREADED`. Runs callbacks asynchronously using the python threading library.
+- AsyncioScheduler: Corresponds to `SchedulingMode.ASYNCIO`. Runs callbacks asynchronously using the python asyncio library. This requires an asyncio loop already running, and all callbacks must be async-aware.
+
+Additionally, custom schedulers may be created and passed alongside the `SchedulingMode.CUSTOM` enum.
+
+```python
+
+class LoggingSyncScheduler:
+
+    def schedule(self, func: Callable[..., Any], *args, **kwds) -> None:
+        print(f"Calling function {func}")
+        threading.Thread(target=func, args=args, kwargs=kwds).start()
+
+
+event_trigger.config(event_trigger.SchedulingMode.CUSTOM, LoggingSyncScheduler())
+
+```
 
 
 

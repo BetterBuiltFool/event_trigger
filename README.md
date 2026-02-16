@@ -186,6 +186,11 @@ foo = Foo()
 def do_the_thing(this: Foo) -> None:
     print(f"{this} has been enabled")
 
+
+# For simple expressions, a lambda is also okay
+
+foo.OnEnable(lambda this: print(f"{this} has been enabled"))
+
 ```
 
 Additionally, objects can subscribe to an event as well. It uses the event as a decorator, too, but requires an additional parameter, typically the subscribing object. 

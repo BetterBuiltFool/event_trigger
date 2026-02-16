@@ -73,10 +73,11 @@
     </li>
     <li><a href="#usage">Usage</a></li>
       <ul>
-        <li><a href="#using-game">Using Game</a></li>
-        <li><a href="#loop-phases">Loop Phases</a></li>
-        <li><a href="#entities-and-renderables">Entities and Renderables</a></li>
-        <li><a href="#forget-about-screen-space">Forget About Screen Space</a></li>
+        <li><a href="#defining-events">Defining Events</a></li>
+        <li><a href="#assigning-instances">Assigning Instances</a></li>
+        <li><a href="#subscribing-to-events">Subscribing to Events</a></li>
+        <li><a href="#triggering-events">Triggering Events</a></li>
+        <li><a href="#synchronous-and-asynchronous">Synchronous and Asynchronous</a></li>
       </ul>
     <li><a href="#roadmap">Roadmap</a></li>
     <!--<li><a href="#contributing">Contributing</a></li>-->
@@ -169,7 +170,7 @@ class Foo:
 
 ```
 
-When a `Foo` is created, a new instance of `OnEnable` is created for it, as well. It is recommended that the event attribute copies the event name so users know that is is an event.
+When a `Foo` is created, a new instance of `OnEnable` is created for it, as well. The event attribute should be in Pascal case, matching the event class name, to ensure that users know it is an event and not a 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -188,6 +189,7 @@ def do_the_thing(this: Foo) -> None:
 
 
 # For simple expressions, a lambda is also okay
+# For this though, we do not use it as a decorator.
 
 foo.OnEnable(lambda this: print(f"{this} has been enabled"))
 
@@ -207,7 +209,7 @@ class FooListener:
             print(f"{self} noticed {this} is now enabled")
 ```
 
-If we have multiple `FooListener`s, the message will be printed once each.
+If we have multiple of `FooListener`, the message will be printed once each.
 
 Important notes:
 - The callback should be defined in the init method.

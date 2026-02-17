@@ -1,4 +1,6 @@
+import io
 import unittest
+import unittest.mock
 
 from event_trigger.event import Event, SENTINEL
 
@@ -134,6 +136,18 @@ class TestInstanceEvent(unittest.TestCase):
         self.test_object.OnTestEvent1._notify(True)
 
         self.assertTrue(self.value1)
+
+    def test_notify_lambda(self) -> None:
+
+        with unittest.mock.patch("sys.stdout", new=io.StringIO()) as output_catcher:
+            test_value = 1
+            self.test_object.OnTestEvent2(lambda param2: print(param2))
+
+            self.test_object.OnTestEvent2.trigger(test_value)
+
+            output = output_catcher.getvalue()
+
+            self.assertEqual(int(output), test_value)
 
     def test_call_(self):
 

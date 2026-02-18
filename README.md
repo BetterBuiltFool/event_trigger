@@ -79,7 +79,7 @@
         <li><a href="#triggering-events">Triggering Events</a></li>
         <li><a href="#synchronous-and-asynchronous">Synchronous and Asynchronous</a></li>
       </ul>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <!-- <li><a href="#roadmap">Roadmap</a></li> -->
     <!--<li><a href="#contributing">Contributing</a></li>-->
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -277,9 +277,9 @@ event_trigger.config(event_trigger.SchedulingMode.CUSTOM, LoggingSyncScheduler()
 
 
 <!-- ROADMAP -->
-## Roadmap
+<!-- ## Roadmap
 
-- [ ] (Eternal) Improve the renderer. Faster rendering means more renderables!
+- [ ] (Eternal) Improve the renderer. Faster rendering means more renderables! -->
 
 <!--
 - [ ] Feature 2

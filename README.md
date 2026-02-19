@@ -262,14 +262,14 @@ Additionally, custom schedulers may be created and passed alongside the `Schedul
 
 ```python
 
-class LoggingSyncScheduler:
+class LoggingThreadScheduler:
 
     def schedule(self, func: Callable[..., Any], *args, **kwds) -> None:
         print(f"Calling function {func}")
         threading.Thread(target=func, args=args, kwargs=kwds).start()
 
 
-event_trigger.config(event_trigger.SchedulingMode.CUSTOM, LoggingSyncScheduler())
+event_trigger.config(event_trigger.SchedulingMode.CUSTOM, LoggingThreadScheduler())
 
 ```
 

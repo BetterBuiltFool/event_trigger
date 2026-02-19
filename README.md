@@ -41,7 +41,7 @@
 <h3 align="center">Event Triggers</h3>
 
   <p align="center">
-    Simple, Subscribable Events for Objects
+    Simple, Subscribable, Luau-Style Events
     <br />
     <a href="https://github.com/BetterBuiltFool/event_trigger"><strong>Explore the docs »</strong></a>
     <br />
@@ -97,7 +97,7 @@
 -->
 TODO Project Name
 
-Event triggers are custom, subscribable events that can be assigned to objects, and 
+Event triggers are custom, subscribable events in the style of Luau events that allow for decoupled access between objects.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

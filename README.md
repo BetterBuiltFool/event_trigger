@@ -33,26 +33,26 @@
 <br />
 <!--
 <div align="center">
-  <a href="https://github.com/BetterBuiltFool/event_trigger">
+  <a href="https://github.com/BetterBuiltFool/hair_trigger">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 -->
 
-<h3 align="center">Event Triggers</h3>
+<h3 align="center">Hair Trigger</h3>
 
   <p align="center">
     Simple, Subscribable, Luau-Style Events
     <br />
-    <a href="https://github.com/BetterBuiltFool/event_trigger"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/BetterBuiltFool/hair_trigger"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <!--
-    <a href="https://github.com/BetterBuiltFool/event_trigger">View Demo</a>
+    <a href="https://github.com/BetterBuiltFool/hair_trigger">View Demo</a>
     ·
     -->
-    <a href="https://github.com/BetterBuiltFool/event_trigger/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/BetterBuiltFool/hair_trigger/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/BetterBuiltFool/event_trigger/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/BetterBuiltFool/hair_trigger/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -97,7 +97,7 @@
 -->
 TODO Project Name
 
-Event triggers are custom, subscribable events in the style of Luau events that allow for decoupled access between objects.
+Hair Trigger offers custom, subscribable events in the style of Luau events that allow for decoupled access between objects.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -105,22 +105,22 @@ Event triggers are custom, subscribable events in the style of Luau events that 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Event trigger is written in pure python, with no system dependencies, and should be OS-agnostic.
+Hair Trigger is written in pure python, with no system dependencies, and should be OS-agnostic.
 
 ### Installation
 
-Event trigger can be installed from the [PyPI][pypi-url] using [pip][pip-url]:
+Hair Trigger can be installed from the [PyPI][pypi-url] using [pip][pip-url]:
 
 ```sh
-pip install event_trigger
+pip install hair_trigger
 ```
 
 and can be imported for use with:
 ```python
-import event_trigger
+import hair_trigger
 ```
 
-Event trigger has no dependencies beyond python itself.
+Hair Trigger has no dependencies beyond python itself.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -129,7 +129,7 @@ Event trigger has no dependencies beyond python itself.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Event trigger supplies no events by default, they must be custom made.
+Hair Trigger supplies no events by default, they must be custom made.
 
 As an example, we'll make a simple event for detecting when an object is enabled.
 
@@ -138,9 +138,9 @@ As an example, we'll make a simple event for detecting when an object is enabled
 
 ```python
 from typing import Any
-import event_trigger
+import hair_trigger
 
-class OnEnable(event_trigger.Event):
+class OnEnable(hair_trigger.Event):
     """
     Called whenever the owner becomes enabled.
 
@@ -244,12 +244,12 @@ class Foo:
 
 ### Synchronous and Asynchronous
 
-By default, Event trigger will attempt to run callbacks in synchronous mode. This means that any blocking that occurs in the callback will also block the main program. To get around this, you may use the `config` function to change the scheduler.
+By default, Hair Trigger will attempt to run callbacks in synchronous mode. This means that any blocking that occurs in the callback will also block the main program. To get around this, you may use the `config` function to change the scheduler.
 
 ```python
-import event_trigger
+import hair_trigger
 
-event_trigger.config(event_trigger.SchedulingMode.THREADED)
+hair_trigger.config(hair_trigger.SchedulingMode.THREADED)
 
 ```
 
@@ -269,7 +269,7 @@ class LoggingThreadScheduler:
         threading.Thread(target=func, args=args, kwargs=kwds).start()
 
 
-event_trigger.config(event_trigger.SchedulingMode.CUSTOM, LoggingThreadScheduler())
+hair_trigger.config(hair_trigger.SchedulingMode.CUSTOM, LoggingThreadScheduler())
 
 ```
 
@@ -287,7 +287,7 @@ event_trigger.config(event_trigger.SchedulingMode.CUSTOM, LoggingThreadScheduler
     - [ ] Nested Feature
 -->
 
-See the [open issues](https://github.com/BetterBuiltFool/event_trigger/issues) for a full list of proposed features (and known issues).
+<!-- See the [open issues](https://github.com/BetterBuiltFool/hair_trigger/issues) for a full list of proposed features (and known issues). -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -312,8 +312,8 @@ Don't forget to give the project a star! Thanks again!
 
 ### Top contributors:
 
-<a href="https://github.com/BetterBuiltFool/event_trigger/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=BetterBuiltFool/event_trigger" alt="contrib.rocks image" />
+<a href="https://github.com/BetterBuiltFool/hair_trigger/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=BetterBuiltFool/hair_trigger" alt="contrib.rocks image" />
 </a>
 -->
 
@@ -338,7 +338,7 @@ Bluesky - [@betterbuiltfool.bsky.social](https://bsky.app/profile/betterbuiltfoo
  - [@twitter_handle](https://twitter.com/twitter_handle)
 -->
 
-Project Link: [https://github.com/BetterBuiltFool/event_trigger](https://github.com/BetterBuiltFool/event_trigger)
+Project Link: [https://github.com/BetterBuiltFool/hair_trigger](https://github.com/BetterBuiltFool/hair_trigger)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -357,16 +357,16 @@ Project Link: [https://github.com/BetterBuiltFool/event_trigger](https://github.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/BetterBuiltFool/event_trigger.svg?style=for-the-badge
-[contributors-url]: https://github.com/BetterBuiltFool/event_trigger/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/BetterBuiltFool/event_trigger.svg?style=for-the-badge
-[forks-url]: https://github.com/BetterBuiltFool/event_trigger/network/members
-[stars-shield]: https://img.shields.io/github/stars/BetterBuiltFool/event_trigger.svg?style=for-the-badge
-[stars-url]: https://github.com/BetterBuiltFool/event_trigger/stargazers
-[issues-shield]: https://img.shields.io/github/issues/BetterBuiltFool/event_trigger.svg?style=for-the-badge
-[issues-url]: https://github.com/BetterBuiltFool/event_trigger/issues
-[license-shield]: https://img.shields.io/github/license/BetterBuiltFool/event_trigger.svg?style=for-the-badge
-[license-url]: https://github.com/BetterBuiltFool/event_trigger/blob/main/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/BetterBuiltFool/hair_trigger.svg?style=for-the-badge
+[contributors-url]: https://github.com/BetterBuiltFool/hair_trigger/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/BetterBuiltFool/hair_trigger.svg?style=for-the-badge
+[forks-url]: https://github.com/BetterBuiltFool/hair_trigger/network/members
+[stars-shield]: https://img.shields.io/github/stars/BetterBuiltFool/hair_trigger.svg?style=for-the-badge
+[stars-url]: https://github.com/BetterBuiltFool/hair_trigger/stargazers
+[issues-shield]: https://img.shields.io/github/issues/BetterBuiltFool/hair_trigger.svg?style=for-the-badge
+[issues-url]: https://github.com/BetterBuiltFool/hair_trigger/issues
+[license-shield]: https://img.shields.io/github/license/BetterBuiltFool/hair_trigger.svg?style=for-the-badge
+[license-url]: https://github.com/BetterBuiltFool/hair_trigger/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
@@ -388,5 +388,5 @@ Project Link: [https://github.com/BetterBuiltFool/event_trigger](https://github.
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
-[pypi-url]: https://pypi.org/project/event_trigger
+[pypi-url]: https://pypi.org/project/hair_trigger
 [pip-url]: https://pip.pypa.io/en/stable/

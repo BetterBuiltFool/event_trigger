@@ -2,7 +2,7 @@ import io
 import unittest
 import unittest.mock
 
-from event_trigger.event import Event, SENTINEL
+from hair_trigger.event import Event, SENTINEL
 
 
 class OnTestEvent1(Event):

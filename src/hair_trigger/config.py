@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import auto, Enum
 from typing import TYPE_CHECKING
 
-import event_trigger.scheduler as scheduler
+import hair_trigger.scheduler as scheduler
 
 if TYPE_CHECKING:
     pass

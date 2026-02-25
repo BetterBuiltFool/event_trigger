@@ -2,9 +2,9 @@ from collections.abc import Callable
 from typing import Any
 import unittest
 
-from event_trigger.config import config, SchedulingMode
-from event_trigger import scheduler
-from event_trigger.scheduler import Scheduler
+from hair_trigger.config import config, SchedulingMode
+from hair_trigger import scheduler
+from hair_trigger.scheduler import Scheduler
 
 
 class CustomScheduler(Scheduler):

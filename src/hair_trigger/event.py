@@ -71,7 +71,9 @@ class Event[T](ABC):
         listeners.append(listener)
 
     def _register_method(self, listener: MethodType) -> None:
-        pass
+        bound_object = listener.__self__
+        listeners = self.method_listeners.setdefault(bound_object, [])
+        listeners.append(listener)
 
     def _deregister(self, listener: Callable):
         for caller, listeners in self.listeners.items():

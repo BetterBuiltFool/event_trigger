@@ -95,9 +95,18 @@ class TestInstanceEvent(unittest.TestCase):
                 def _(self):
                     pass
 
+                event1(self.test_method)
+
+            def test_method(self, param1: bool) -> None:
+                pass
+
         test_item = TestItem()
 
         self.assertTrue(event1.listeners.get(test_item))
+
+        self.assertTrue(event1.method_listeners.get(test_item))
+
+        self.assertIn(test_item.test_method, event1.method_listeners.get(test_item, []))
 
         class TestItem2:
 

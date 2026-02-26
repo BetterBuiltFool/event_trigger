@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from functools import singledispatchmethod
+from types import MethodType
 from typing import Any, TYPE_CHECKING
 from weakref import ref, WeakKeyDictionary
 
@@ -29,6 +30,9 @@ class Event[T](ABC):
     def __init__(self, instance: T) -> None:
         self._instance = ref(instance)
         self.listeners: WeakKeyDictionary[Any, list[Callable]] = WeakKeyDictionary()
+        self.method_listeners: WeakKeyDictionary[Any, list[Callable]] = (
+            WeakKeyDictionary()
+        )
 
     @property
     def instance(self) -> T | None:
@@ -61,10 +65,13 @@ class Event[T](ABC):
     def trigger(self, *args, **kwds) -> None:
         self._notify(*args, **kwds)
 
-    def _register(self, caller, listener: Callable):
+    def _register(self, caller, listener: Callable) -> None:
         listeners = self.listeners.setdefault(caller, [])
         # TODO Test if method, keep methods and function in two different sets?
         listeners.append(listener)
+
+    def _register_method(self, listener: MethodType) -> None:
+        pass
 
     def _deregister(self, listener: Callable):
         for caller, listeners in self.listeners.items():

@@ -49,7 +49,10 @@ class Event[T](ABC):
 
     @__call__.register
     def _(self, listener: Callable) -> Callable:
-        self._register(SENTINEL, listener)
+        if isinstance(listener, MethodType):
+            self._register_method(listener)
+        else:
+            self._register(SENTINEL, listener)
         return listener
 
     @__call__.register

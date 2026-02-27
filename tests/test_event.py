@@ -126,7 +126,7 @@ class TestInstanceEvent(unittest.TestCase):
 
         event1 = self.test_object.OnTestEvent1
 
-        class TestItem3:
+        class TestItem:
 
             def __init__(self) -> None:
                 self.param1: bool = False
@@ -136,7 +136,7 @@ class TestInstanceEvent(unittest.TestCase):
             def test_method(self, param1: bool) -> None:
                 self.param1 = param1
 
-        test_item = TestItem3()
+        test_item = TestItem()
 
         self.assertFalse(test_item.param1)
 

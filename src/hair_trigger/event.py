@@ -104,3 +104,6 @@ class Event[T](ABC):
                 continue
             for listener in listeners:
                 scheduler.schedule(listener, *args)
+        for method_listeners in self.method_listeners.values():
+            for method in method_listeners:
+                scheduler.schedule(method, *args)

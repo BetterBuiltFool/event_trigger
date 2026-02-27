@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from functools import singledispatchmethod
+from types import MethodType
 from typing import Any, TYPE_CHECKING
 from weakref import ref, WeakKeyDictionary
 
@@ -29,6 +30,9 @@ class Event[T](ABC):
     def __init__(self, instance: T) -> None:
         self._instance = ref(instance)
         self.listeners: WeakKeyDictionary[Any, list[Callable]] = WeakKeyDictionary()
+        self.method_listeners: WeakKeyDictionary[Any, list[Callable]] = (
+            WeakKeyDictionary()
+        )
 
     @property
     def instance(self) -> T | None:
@@ -45,7 +49,10 @@ class Event[T](ABC):
 
     @__call__.register
     def _(self, listener: Callable) -> Callable:
-        self._register(SENTINEL, listener)
+        if isinstance(listener, MethodType):
+            self._register_method(listener)
+        else:
+            self._register(SENTINEL, listener)
         return listener
 
     @__call__.register
@@ -61,9 +68,14 @@ class Event[T](ABC):
     def trigger(self, *args, **kwds) -> None:
         self._notify(*args, **kwds)
 
-    def _register(self, caller, listener: Callable):
+    def _register(self, caller, listener: Callable) -> None:
         listeners = self.listeners.setdefault(caller, [])
         # TODO Test if method, keep methods and function in two different sets?
+        listeners.append(listener)
+
+    def _register_method(self, listener: MethodType) -> None:
+        bound_object = listener.__self__
+        listeners = self.method_listeners.setdefault(bound_object, [])
         listeners.append(listener)
 
     def _deregister(self, listener: Callable):
@@ -92,3 +104,6 @@ class Event[T](ABC):
                 continue
             for listener in listeners:
                 scheduler.schedule(listener, *args)
+        for method_listeners in self.method_listeners.values():
+            for method in method_listeners:
+                scheduler.schedule(method, *args)

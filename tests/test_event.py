@@ -95,33 +95,18 @@ class TestInstanceEvent(unittest.TestCase):
                 def _(self):
                     pass
 
+                event1(self.test_method)
+
+            def test_method(self, param1: bool) -> None:
+                pass
+
         test_item = TestItem()
 
         self.assertTrue(event1.listeners.get(test_item))
 
-        class TestItem2:
+        self.assertTrue(event1.method_listeners.get(test_item))
 
-            def test_method(self):
-                pass
-
-        test_item_2 = TestItem2()
-        test_item_3 = TestItem2()
-
-        event1._register(SENTINEL, test_item_2.test_method)
-
-        callables = self.test_object.OnTestEvent1.listeners.get(SENTINEL)
-
-        assert callables is not None
-
-        self.assertIn(
-            test_item_2.test_method,
-            callables,
-            # Bound methods go under SENTINEL
-        )
-        self.assertNotIn(
-            test_item_3.test_method,
-            callables,
-        )
+        self.assertIn(test_item.test_method, event1.method_listeners.get(test_item, []))
 
     def test_notify(self):
 
@@ -136,6 +121,28 @@ class TestInstanceEvent(unittest.TestCase):
         self.test_object.OnTestEvent1._notify(True)
 
         self.assertTrue(self.value1)
+
+    def test_notify_method(self) -> None:
+
+        event1 = self.test_object.OnTestEvent1
+
+        class TestItem:
+
+            def __init__(self) -> None:
+                self.param1: bool = False
+
+                event1(self.test_method)
+
+            def test_method(self, param1: bool) -> None:
+                self.param1 = param1
+
+        test_item = TestItem()
+
+        self.assertFalse(test_item.param1)
+
+        self.test_object.OnTestEvent1._notify(True)
+
+        self.assertTrue(test_item.param1)
 
     def test_notify_lambda(self) -> None:
 

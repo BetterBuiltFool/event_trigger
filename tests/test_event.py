@@ -146,6 +146,28 @@ class TestInstanceEvent(unittest.TestCase):
 
         self.assertTrue(self.value1)
 
+    def test_notify_method(self) -> None:
+
+        event1 = self.test_object.OnTestEvent1
+
+        class TestItem3:
+
+            def __init__(self) -> None:
+                self.param1: bool = False
+
+                event1(self.test_method)
+
+            def test_method(self, param1: bool) -> None:
+                self.param1 = param1
+
+        test_item = TestItem3()
+
+        self.assertFalse(test_item.param1)
+
+        self.test_object.OnTestEvent1._notify(True)
+
+        self.assertTrue(test_item.param1)
+
     def test_notify_lambda(self) -> None:
 
         with unittest.mock.patch("sys.stdout", new=io.StringIO()) as output_catcher:

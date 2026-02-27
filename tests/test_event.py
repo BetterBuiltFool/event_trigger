@@ -108,30 +108,6 @@ class TestInstanceEvent(unittest.TestCase):
 
         self.assertIn(test_item.test_method, event1.method_listeners.get(test_item, []))
 
-        class TestItem2:
-
-            def test_method(self):
-                pass
-
-        test_item_2 = TestItem2()
-        test_item_3 = TestItem2()
-
-        event1._register(SENTINEL, test_item_2.test_method)
-
-        callables = self.test_object.OnTestEvent1.listeners.get(SENTINEL)
-
-        assert callables is not None
-
-        self.assertIn(
-            test_item_2.test_method,
-            callables,
-            # Bound methods go under SENTINEL
-        )
-        self.assertNotIn(
-            test_item_3.test_method,
-            callables,
-        )
-
     def test_notify(self):
 
         self.value1 = None

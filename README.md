@@ -209,14 +209,30 @@ class FooListener:
             print(f"{self} noticed {this} is now enabled")
 ```
 
-If we have multiple of `FooListener`, the message will be printed once each.
+Alternatively, we can subscribe to a bound method directly, by using the event as a regular function.
+
+```python
+
+class FooListener:
+
+    def __init__(self, foo:Foo) -> None:
+
+        foo.OnEnable(self.listen_in)
+        
+    def listen_in(self, this: Foo) -> None:
+        print(f"{self} noticed {this} is now enabled")
+```
+
+Both version have the same behavior, and if we have multiple of `FooListener`, the message will be printed once each.
 
 Important notes:
-- The callback should be defined in the init method.
-- The callback does not need a name, "_" is fine.
-- The `self` inside the callback must shadow the `self` of the init. This allows the callback to use the object, but won't prevent garbage collection due to a closure.
-- Other than the `self`, the signature is _exactly the same_ as the trigger method of `OnEnable`.
-- The owner of the callback doesn't have to be the subscribing object, just something that will live around the same lifetime.
+- The callback must be subscribed in a method, not the class definition.
+- The init method is a great candidate for callback subscription, but it can be done elsewhere if needed. Get creative!
+- For new callbacks created inside the init/equivalent:
+  - The callback does not need a name, "_" is fine.
+  - The `self` inside the callback must shadow the `self` of the init. This allows the callback to use the object, but won't prevent garbage collection due to a closure.
+  - Other than the `self`, the signature is _exactly the same_ as the trigger method of the event.
+  - The owner of the callback doesn't have to be the subscribing object, just something that will live around the same lifetime.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

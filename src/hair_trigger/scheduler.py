@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import deque
 from typing import Any, TYPE_CHECKING
 
 from .typing.scheduler import Scheduler
@@ -26,6 +27,18 @@ class StackScheduler(Scheduler):
 
     def __init__(self) -> None:
         self._scheduled_events: list[EventArgs] = []
+
+    def schedule(self, event: Event[Any], *args, **kwds) -> None:
+        self._scheduled_events.append((event, args, kwds))
+
+
+class QueueScheduler(Scheduler):
+    """
+    Scheduler that stores events and arguments in a queue until called upon.
+    """
+
+    def __init__(self) -> None:
+        self._scheduled_events: deque[EventArgs] = deque()
 
     def schedule(self, event: Event[Any], *args, **kwds) -> None:
         self._scheduled_events.append((event, args, kwds))

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Protocol, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterator
     from typing import Any
     from hair_trigger.event import Event
 
@@ -26,4 +26,4 @@ class Scheduler(Protocol):
         """
         ...
 
-    def __iter__(self) -> Iterable[tuple[Event, Any, Any]]: ...
+    def __iter__(self) -> Iterator[tuple[Event, Any, Any]]: ...

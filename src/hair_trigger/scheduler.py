@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import deque
-from collections.abc import Iterable
+from collections.abc import Iterator
 from typing import Any, TYPE_CHECKING
 
 from .typing.scheduler import Scheduler
@@ -20,8 +20,8 @@ class InstantScheduler(Scheduler):
     def schedule(self, event: Event[Any], *args, **kwds) -> None:
         event._notify(*args, **kwds)
 
-    def __iter__(self) -> Iterable[tuple[Event, Any, Any]]:
-        return []
+    def __iter__(self) -> Iterator[tuple[Event, Any, Any]]:
+        yield from []
 
 
 class StackScheduler(Scheduler):
@@ -35,8 +35,8 @@ class StackScheduler(Scheduler):
     def schedule(self, event: Event[Any], *args, **kwds) -> None:
         self._scheduled_events.append((event, args, kwds))
 
-    def __iter__(self) -> Iterable[tuple[Event, Any, Any]]:
-        return self._scheduled_events
+    def __iter__(self) -> Iterator[tuple[Event, Any, Any]]:
+        yield from self._scheduled_events
 
 
 class QueueScheduler(Scheduler):
@@ -50,8 +50,8 @@ class QueueScheduler(Scheduler):
     def schedule(self, event: Event[Any], *args, **kwds) -> None:
         self._scheduled_events.append((event, args, kwds))
 
-    def __iter__(self) -> Iterable[tuple[Event, Any, Any]]:
-        return self._scheduled_events
+    def __iter__(self) -> Iterator[tuple[Event, Any, Any]]:
+        yield from self._scheduled_events
 
 
 _active_scheduler: Scheduler = InstantScheduler()

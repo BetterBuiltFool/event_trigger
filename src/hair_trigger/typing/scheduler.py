@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Protocol, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
     from typing import Any
     from hair_trigger.event import Event
 
@@ -24,3 +25,5 @@ class Scheduler(Protocol):
         :type kwds: Any
         """
         ...
+
+    def __iter__(self) -> Iterable[tuple[Event, Any, Any]]: ...

@@ -24,3 +24,10 @@ class Scheduler(Protocol):
         :type kwds: Any
         """
         ...
+
+    def pump(self) -> None:
+        """
+        Processes all pending events, if any.
+        Will attempt to run until backlog is cleared.
+        """
+        ...

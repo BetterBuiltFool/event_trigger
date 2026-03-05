@@ -97,10 +97,10 @@ class Event[T](ABC):
         for caller, listeners in self.listeners.items():
             if caller is not SENTINEL:
                 for listener in listeners:
-                    threader.start(listener, *(caller, *args))
+                    threader.start(listener, *(caller, *args), **kwds)
                 continue
             for listener in listeners:
-                threader.start(listener, *args)
+                threader.start(listener, *args, **kwds)
         for method_listeners in self.method_listeners.values():
             for method in method_listeners:
-                threader.start(method, *args)
+                threader.start(method, *args, **kwds)

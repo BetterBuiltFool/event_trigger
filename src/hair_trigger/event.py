@@ -4,14 +4,10 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from functools import singledispatchmethod
 from types import MethodType
-from typing import Any, TYPE_CHECKING
+from typing import Any
 from weakref import ref, WeakKeyDictionary
 
 from hair_trigger import scheduler, threader
-
-
-if TYPE_CHECKING:
-    pass
 
 
 class _Sentinel:

@@ -16,11 +16,8 @@ class Scheduler(Protocol):
         Schedules a event to be triggered.
 
         :param event: Event to be scheduled.
-        :type event: Event
         :param args: Pass-through positional arguments for _event_.
-        :type args: Any
         :param kwds: Pass-through keyword arguments for _event_.
-        :type kwds: Any
         """
         ...
 

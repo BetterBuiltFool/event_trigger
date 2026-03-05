@@ -64,6 +64,13 @@ _active_scheduler: Scheduler = DEFAULT()
 
 
 def schedule(event: Event, *args, **kwds) -> None:
+    """
+    Schedules an event to notify its listeners.
+
+    :param event: The event being scheduled.
+    :param args: All position arguments for the event.
+    "param kwds: All keyword arguments for the event.
+    """
     _active_scheduler.schedule(event, *args, **kwds)
 
 

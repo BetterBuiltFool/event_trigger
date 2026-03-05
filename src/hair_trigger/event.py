@@ -79,7 +79,7 @@ class Event[T](ABC):
         listeners.append(listener)
 
     def _deregister(self, listener: Callable):
-        for caller, listeners in self.listeners.items():
+        for listeners in self.listeners.values():
             if listener in listeners:
                 listeners.remove(listener)
                 # Note: if a listener managed to get in there multiple times,

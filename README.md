@@ -77,7 +77,7 @@
         <li><a href="#assigning-instances">Assigning Instances</a></li>
         <li><a href="#subscribing-to-events">Subscribing to Events</a></li>
         <li><a href="#triggering-events">Triggering Events</a></li>
-        <li><a href="#synchronous-and-asynchronous">Synchronous and Asynchronous</a></li>
+        <li><a href="#configuration">Configuration</a></li>
       </ul>
     <!-- <li><a href="#roadmap">Roadmap</a></li> -->
     <!--<li><a href="#contributing">Contributing</a></li>-->
@@ -95,7 +95,6 @@
 <!--
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 -->
-TODO Project Name
 
 Hair Trigger offers custom, subscribable events in the style of Luau events that allow for decoupled access between objects.
 
@@ -151,8 +150,8 @@ class OnEnable(hair_trigger.Event):
         return super().trigger(this)
 ```
 
-Naming convention is suggested as `On[Event name]`. The `trigger` method must be defined, and must, at a minimum, call the super method. `trigger`s signature will also define the required signature of subscribing callbacks.
-It is recommended to put the docstring describing `trigger`s parameters in the class docstring, so that it is visible to users.
+Naming convention is suggested as `On[Event name]`. The `trigger` method must be defined, and must, at a minimum, call the super method. `trigger`'s signature will also define the required signature of subscribing callbacks.
+It is recommended to put the docstring describing `trigger`'s parameters in the class docstring, so that it is visible to users.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -164,20 +163,20 @@ Now we'll need an object to have the event.
 ```python
 
 class Foo:
-    def __init__(self, enabled:bool = False) -> None:
-        self.OnEnable = OnEnable(self)
+    def __init__(self, enabled: bool = False) -> None:
+        self.OnEnable = OnEnable()
         self._enabled = enabled
 
 ```
 
-When a `Foo` is created, a new instance of `OnEnable` is created for it, as well. The event attribute should be in Pascal case, matching the event class name, to ensure that users know it is an event and not a 
+When a `Foo` is created, a new instance of `OnEnable` is created for it, as well. It is recommended that the event attribute breaks normal snake_case style and uses PascalCase to make it clear that this is an event object rather than a method or a typical attribute. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Subscribing to Events
 
 
-Let's say we want to print something when a `Foo` is enabled. Subscribing is done by using the event instance as a decorator.
+Let's say we want to print something when a `Foo` is enabled. Subscribing is done primarily by using the event instance as a decorator.
 
 
 ```python
@@ -195,21 +194,21 @@ foo.OnEnable(lambda this: print(f"{this} has been enabled"))
 
 ```
 
-Additionally, objects can subscribe to an event as well. It uses the event as a decorator, too, but requires an additional parameter, typically the subscribing object. 
+Additionally, objects can subscribe to an event as well. It uses the event as a decorator, too, but requires an additional parameter, the subscribing object. Subscribers need an owner so they don't tie up garbage collection.
 
 ```python
 
 class FooListener:
 
-    def __init__(self, foo:Foo) -> None:
+    def __init__(self, foo: Foo) -> None:
 
         @foo.OnEnable(self)
-        def _(self, this:Foo) -> None:
+        def _(self, this: Foo) -> None:
             # Note: `self` here will shadow the `self` of init. This is important!
             print(f"{self} noticed {this} is now enabled")
 ```
 
-Alternatively, we can subscribe to a bound method directly, by using the event as a regular function.
+Alternatively, we can subscribe to a bound method directly, by using the event as a regular function. This doesn't require the subscribing object to be passed, it is extracted from the bound method.
 
 ```python
 
@@ -223,7 +222,7 @@ class FooListener:
         print(f"{self} noticed {this} is now enabled")
 ```
 
-Both version have the same behavior, and if we have multiple of `FooListener`, the message will be printed once each.
+Both versions have the same behavior, and if we have multiple of `FooListener` with the same `Foo`, the message will be printed once each.
 
 Important notes:
 - The callback must be subscribed in a method, not the class definition.
@@ -231,8 +230,7 @@ Important notes:
 - For new callbacks created inside the init/equivalent:
   - The callback does not need a name, "_" is fine.
   - The `self` inside the callback must shadow the `self` of the init. This allows the callback to use the object, but won't prevent garbage collection due to a closure.
-  - Other than the `self`, the signature is _exactly the same_ as the trigger method of the event.
-  - The owner of the callback doesn't have to be the subscribing object, just something that will live around the same lifetime.
+  - Other than the `self`, the signature take all parameters as the trigger method of the event. Unused parameters can be caught with *args.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -258,39 +256,75 @@ class Foo:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-### Synchronous and Asynchronous
+### Configuration
 
-By default, Hair Trigger will attempt to run callbacks in synchronous mode. This means that any blocking that occurs in the callback will also block the main program. To get around this, you may use the `config` function to change the scheduler.
+By default, Hair Trigger will attempt to run callbacks immediately, in syncronous mode. If asynchronous behavior is needed, or events need to be run manually or in a particular order, this can be changed using the `config` function.
+
+#### Synchronous vs Asynchronous
+
+The default system will run callback synchronously, so any blocking that occurs will block the entire thread. If that's undesireable, you can also use:
+
+- ThreadThreader: Uses the Python threading module to run callbacks in new threads, good for general purpose multithreading.
+- AsyncioThreader: Uses Python's asyncio module, useful for when threading must be async-aware, such as in WASM deployments. 
 
 ```python
 import hair_trigger
+from hair_trigger.threader import AsyncioThreader, ThreadThreader
 
-hair_trigger.config(hair_trigger.SchedulingMode.THREADED)
+# Run standard threads
+hair_trigger.config(threader=ThreadThreader())
+
+
+# Run async-aware
+hair_trigger.config(threader=AsyncioThreader())
+```
+
+#### Scheduling Modes
+
+Without config, triggering an event instantly begins notifying the event's subscribers, and if those trigger additional events, they'll take over mid-call. Instead, you can use a deferred scheduler.
+
+Included are:
+
+- StackScheduler: New events are put onto a stack, so that the newest event resolve before olderone resolve.
+- QueueScheduler: New events are put into a queue, so events resolve in the order they are triggered.
+
+The deferred schedulers must be triggered manually, using `hair_trigger.scheduler.pump_events()`.
+
+```python
+import hair_trigger
+import hair_trigger.scheduler
+from hair_trigger.scheduler import QueueScheduler
+
+hair_trigger.config(scheduler=QueueScheduler())
+
+# Do things to trigger events
+
+hair_trigger.scheduler.pump_events()
 
 ```
 
-There are three schedulers available:
-- SyncScheduler: Corresponds to `SchedulingMode.DEFAULT`. Runs callbacks synchronously.
-- ThreadScheduler: Corresponds to `SchedulingMode.THREADED`. Runs callbacks asynchronously using the python threading library.
-- AsyncioScheduler: Corresponds to `SchedulingMode.ASYNCIO`. Runs callbacks asynchronously using the python asyncio library. This requires an asyncio loop already running, and all callbacks must be async-aware.
+#### Custom Threaders and Schedulers
 
-Additionally, custom schedulers may be created and passed alongside the `SchedulingMode.CUSTOM` enum.
+Threaders and schedulers are protocols, so custom one can be created to get specific behaviors.
+
+For example:
 
 ```python
 
-class LoggingThreadScheduler:
+class LoggingThreadThreader:
 
     def schedule(self, func: Callable[..., Any], *args, **kwds) -> None:
         print(f"Calling function {func}")
         threading.Thread(target=func, args=args, kwargs=kwds).start()
 
 
-hair_trigger.config(hair_trigger.SchedulingMode.CUSTOM, LoggingThreadScheduler())
-
+hair_trigger.config(LoggingThreadThreader())
 ```
 
+This will log the function before starting the thread.
 
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 <!-- ## Roadmap

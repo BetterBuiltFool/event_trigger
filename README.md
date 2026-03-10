@@ -41,7 +41,7 @@
 <h3 align="center">Hair Trigger</h3>
 
   <p align="center">
-    Simple, Subscribable, Luau-Style Events
+    Simple, Subscribable, Custom Events
     <br />
     <a href="https://github.com/BetterBuiltFool/hair_trigger"><strong>Explore the docs »</strong></a>
     <br />

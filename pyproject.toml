@@ -18,3 +18,7 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed"
 ]
+
+[project.urls]
+Homepage = "https://github.com/BetterBuiltFool/hair_trigger"
+Issues = "https://github.com/BetterBuiltFool/hair_trigger/issues"
